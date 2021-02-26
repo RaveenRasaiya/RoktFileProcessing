@@ -5,24 +5,22 @@ using Rokt.Domain.Requests;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Text;
 using Xunit;
 
 namespace Rokt.Tests
 {
     public class FileServiceTest : BaseTest
     {
-
         private readonly IFileService _fileService;
         private readonly IValidationService _validationService;
         private readonly IRecordService _recordService;
+
         public FileServiceTest()
         {
             _validationService = new ValidationService();
             _recordService = new RecordService();
             _fileService = new FileService(_validationService, _recordService);
         }
-
 
         [Fact]
         public void FileService_EventSearchRequest_Null()
@@ -94,7 +92,6 @@ namespace Rokt.Tests
             fileInfo.Delete();
         }
 
-
         [Fact]
         public void FileService_EventSearchRequest_Valid_File()
         {
@@ -121,7 +118,6 @@ namespace Rokt.Tests
         [Fact]
         public void FileService_EventSearchRequest_Valid_File_WithMoreLines()
         {
-
             string eventFeeds = @"1990-01-01T02:29:00Z kelsi_brekke@schuppe.biz 21728403-8671-429f-99bd-404936312a55
                                 1990-01-01T04:26:59Z martina@daugherty.ca 6ca02e3d-e978-4f2f-b920-a6fd01a275fc
                                 1990-01-01T10:44:59Z arnoldo.treutel@bartoletti.info 48b9200c-e81c-4eb3-a044-69b2b484c09d

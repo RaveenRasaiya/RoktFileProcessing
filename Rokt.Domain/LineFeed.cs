@@ -1,5 +1,4 @@
-﻿using Rokt.Domain.Base;
-using System;
+﻿using System;
 
 namespace Rokt.Domain
 {

@@ -8,9 +8,9 @@ using System;
 
 namespace Rokt.Console
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             try
             {
@@ -74,5 +74,4 @@ namespace Rokt.Console
                     .BuildServiceProvider();
         }
     }
-
 }

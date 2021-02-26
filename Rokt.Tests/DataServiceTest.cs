@@ -16,8 +16,9 @@ namespace Rokt.Tests
     public class DataServiceTest : BaseTest
     {
         private readonly IDataService _dataService;
-        private readonly Mock<IFileService> _fileService;      
+        private readonly Mock<IFileService> _fileService;
         private readonly JsonSerializerSettings _jsonSerializerSettings;
+
         public DataServiceTest()
         {
             _jsonSerializerSettings = new JsonSerializerSettings
@@ -25,13 +26,12 @@ namespace Rokt.Tests
                 ContractResolver = new CamelCasePropertyNamesContractResolver(),
                 DateFormatHandling = DateFormatHandling.IsoDateFormat,
                 DateTimeZoneHandling = DateTimeZoneHandling.Utc
-            };         
+            };
             _fileService = new Mock<IFileService>();
             _dataService = new DataService(_fileService.Object, _jsonSerializerSettings);
         }
 
         [Fact]
-
         public void DataService_ProcessRequest()
         {
             //arrange
@@ -54,7 +54,7 @@ namespace Rokt.Tests
                 FeedSeparator = ' '
             };
 
-            //act            
+            //act
             var result = _dataService.ExtractData(request);
             result.Should().NotBeNullOrEmpty();
             var actual = JToken.Parse(result);
@@ -67,9 +67,7 @@ namespace Rokt.Tests
             actual.Should().BeEquivalentTo(expected);
         }
 
-
         [Fact]
-
         public void DataService_ProcessRequest_Emtpy_Result()
         {
             //arrange
@@ -84,7 +82,7 @@ namespace Rokt.Tests
                 FeedSeparator = ' '
             };
 
-            //act            
+            //act
             var result = _dataService.ExtractData(request);
             result.Should().BeEmpty();
         }
