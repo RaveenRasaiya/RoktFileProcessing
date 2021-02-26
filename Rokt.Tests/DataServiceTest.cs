@@ -13,7 +13,7 @@ using Xunit;
 
 namespace Rokt.Tests
 {
-    public class DataServiceTest : BaseTest
+    public class DataServiceTest
     {
         private readonly IDataService _dataService;
         private readonly Mock<IFileService> _fileService;
