@@ -19,7 +19,7 @@ namespace Rokt.Application
             _validationService = validationService == null ? throw new ArgumentNullException(nameof(validationService)) : validationService;
             _recordService = recordService == null ? throw new ArgumentNullException(nameof(recordService)) : recordService;
         }
-        public IEnumerable<LineFeed> ReadFile(EventSearchRequest eventSearchRequest)
+        public IEnumerable<LineFeed> Process(EventSearchRequest eventSearchRequest)
         {
             _validationService.Validate(eventSearchRequest);
 

@@ -24,6 +24,7 @@ namespace Rokt.Application
             }
             if (_lineDate >= startDate && _lineDate <= enDate)
             {
+
                 return new LineFeed
                 {
                     EventTime = _lineDate,

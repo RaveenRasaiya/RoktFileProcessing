@@ -36,7 +36,7 @@ namespace Rokt.Tests
         {
             //arrange
 
-            _fileService.Setup(f => f.ReadFile(It.IsAny<EventSearchRequest>())).Returns(new List<LineFeed>
+            _fileService.Setup(f => f.Process(It.IsAny<EventSearchRequest>())).Returns(new List<LineFeed>
             {
                new LineFeed
                     {
@@ -74,7 +74,7 @@ namespace Rokt.Tests
         {
             //arrange
 
-            _fileService.Setup(f => f.ReadFile(It.IsAny<EventSearchRequest>())).Returns(new List<LineFeed> { });
+            _fileService.Setup(f => f.Process(It.IsAny<EventSearchRequest>())).Returns(new List<LineFeed> { });
 
             var request = new EventSearchRequest
             {

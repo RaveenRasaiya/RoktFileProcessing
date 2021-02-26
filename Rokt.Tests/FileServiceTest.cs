@@ -27,7 +27,7 @@ namespace Rokt.Tests
         [Fact]
         public void FileService_EventSearchRequest_Null()
         {
-            Action act = () => _fileService.ReadFile(null);
+            Action act = () => _fileService.Process(null);
             act.Should().Throw<ArgumentNullException>();
         }
 
@@ -41,7 +41,7 @@ namespace Rokt.Tests
                 EndDate = DateTime.Now,
                 FeedSeparator = ' '
             };
-            Action act = () => _fileService.ReadFile(request);
+            Action act = () => _fileService.Process(request);
             act.Should().Throw<FileNotFoundException>();
         }
 
@@ -56,7 +56,7 @@ namespace Rokt.Tests
                 StartDate = DateTime.Now,
                 EndDate = DateTime.Now,
             };
-            Action act = () => _fileService.ReadFile(request);
+            Action act = () => _fileService.Process(request);
             act.Should().Throw<ValidationException>().And.Message.Should().Be("FilePath is empty.");
             fileInfo.Delete();
         }
@@ -72,7 +72,7 @@ namespace Rokt.Tests
                 StartDate = DateTime.MinValue,
                 EndDate = DateTime.Now,
             };
-            Action act = () => _fileService.ReadFile(request);
+            Action act = () => _fileService.Process(request);
             act.Should().Throw<ValidationException>().And.Message.Should().Be("StartDate is not valid.");
             fileInfo.Delete();
         }
@@ -89,7 +89,7 @@ namespace Rokt.Tests
                 EndDate = DateTime.MinValue,
                 FeedSeparator = ' '
             };
-            Action act = () => _fileService.ReadFile(request);
+            Action act = () => _fileService.Process(request);
             act.Should().Throw<ValidationException>().And.Message.Should().Be("EndDate is not valid.");
             fileInfo.Delete();
         }
@@ -112,7 +112,7 @@ namespace Rokt.Tests
                 EndDate = new DateTime(1990, 01, 01, 23, 59, 59),
                 FeedSeparator = ' '
             };
-            var result = _fileService.ReadFile(request);
+            var result = _fileService.Process(request);
             result.Should().NotBeNull();
             result.Should().HaveCount(4);
             fileInfo.Delete();
@@ -135,7 +135,7 @@ namespace Rokt.Tests
                 EndDate = new DateTime(1990, 01, 01, 14, 59, 59),
                 FeedSeparator = ' '
             };
-            var result = _fileService.ReadFile(request);
+            var result = _fileService.Process(request);
             result.Should().NotBeNull();
             result.Should().HaveCount(1);
             fileInfo.Delete();

@@ -1,4 +1,4 @@
-﻿namespace Rokt.Domain.Requests
+﻿namespace Rokt.Domain.Base
 {
     public class BaseSearchRequest
     {

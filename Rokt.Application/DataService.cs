@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Rokt.Application.Interfaces;
+using Rokt.Domain;
 using Rokt.Domain.Requests;
 using System;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace Rokt.Application
         }
         public string ExtractData(EventSearchRequest eventSearchRequest)
         {
-            var lineFeeds = _fileService.ReadFile(eventSearchRequest);
+            var lineFeeds = _fileService.Process(eventSearchRequest);
             if (lineFeeds != null && lineFeeds.Any())
             {
                 return JsonConvert.SerializeObject(lineFeeds.OrderBy(x => x.EventTime), _jsonSerializerSettings);
