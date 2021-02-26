@@ -15,7 +15,7 @@ namespace Rokt.Console
             try
             {
                 ServiceProvider serviceProvider = InitDepencyInjection();
-                System.Console.WriteLine($"Event Search Application");
+                System.Console.WriteLine($"Event Search Application Version: 1.0.0.0");
 
                 EventSearchRequest searchRequest = ReadArgs();
 
@@ -27,7 +27,8 @@ namespace Rokt.Console
 
                 System.Console.WriteLine(response);
                 System.Console.WriteLine($"Process completed at {DateTime.Now}");
-                System.Console.ReadLine();
+                System.Console.WriteLine("\npress any key to exit the process...");
+                System.Console.ReadKey();
             }
             catch (Exception ex)
             {
