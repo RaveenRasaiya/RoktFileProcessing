@@ -1,7 +1,7 @@
-﻿using Rokt.Application.Interfaces;
-using Rokt.Domain;
+﻿using Newtonsoft.Json;
+using Rokt.Application.Interfaces;
+using Rokt.Domain.Requests;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace Rokt.Application
@@ -9,19 +9,20 @@ namespace Rokt.Application
     public class DataService : IDataService
     {
         private readonly IFileService _fileService;
-
-        public DataService(IFileService fileService)
+        private readonly JsonSerializerSettings _jsonSerializerSettings;
+        public DataService(IFileService fileService, JsonSerializerSettings jsonSerializerSettings)
         {
             _fileService = fileService;
+            _jsonSerializerSettings = jsonSerializerSettings;
         }
-        public IEnumerable<LineFeed> ExtraData(string filePath, DateTime startDate, DateTime endDate)
+        public string ExtractData(EventSearchRequest eventSearchRequest)
         {
-            var lineFeeds = _fileService.ReadFile(filePath, startDate, endDate);
+            var lineFeeds = _fileService.ReadFile(eventSearchRequest);
             if (lineFeeds != null && lineFeeds.Any())
             {
-                return lineFeeds.OrderBy(x => x.EventTime);
+                return JsonConvert.SerializeObject(lineFeeds.OrderBy(x => x.EventTime), _jsonSerializerSettings);
             }
-            return lineFeeds;
+            return string.Empty;
         }
     }
 }

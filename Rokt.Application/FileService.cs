@@ -1,59 +1,47 @@
 ﻿using Rokt.Application.Interfaces;
 using Rokt.Domain;
+using Rokt.Domain.Requests;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Rokt.Application
 {
     public class FileService : IFileService
     {
-        /// <summary>
-        /// Read line feed from the file as much as fast, then apply order if there
-        /// </summary>
-        /// <param name="filePath"></param>
-        /// <param name="startDate"></param>
-        /// <param name="endDate"></param>
-        /// <returns></returns>
-        public IEnumerable<LineFeed> ReadFile(string filePath, DateTime startDate, DateTime endDate)
+        private readonly IValidationService _validationService;
+        private readonly IRecordService _recordService;
+
+        public FileService(IValidationService validationService, IRecordService recordService)
         {
-            var result = new ConcurrentBag<LineFeed>();
+            _validationService = validationService == null ? throw new ArgumentNullException(nameof(validationService)) : validationService;
+            _recordService = recordService == null ? throw new ArgumentNullException(nameof(recordService)) : recordService;
+        }
+        public IEnumerable<LineFeed> ReadFile(EventSearchRequest eventSearchRequest)
+        {
+            _validationService.Validate(eventSearchRequest);
+
+            if (!File.Exists(eventSearchRequest.FilePath))
+            {
+                throw new FileNotFoundException($"{eventSearchRequest.FilePath} not found");
+            }
+
+            var feeds = new ConcurrentBag<LineFeed>();
             Parallel.ForEach(
-                File.ReadLines(filePath),
+                File.ReadLines(eventSearchRequest.FilePath),
                 new ParallelOptions { MaxDegreeOfParallelism = Environment.ProcessorCount },
                 (line, state, index) =>
                 {
-                    var entity = ExtractLineFeed(line, startDate, endDate);
+                    var entity = _recordService.ExtractLineFeed(line, eventSearchRequest.FeedSeparator, eventSearchRequest.StartDate, eventSearchRequest.EndDate);
                     if (entity != null)
                     {
-                        result.Add(entity);
+                        feeds.Add(entity);
                     }
                 }
             );
-
-            return result.OrderBy(l => l.EventTime);
-        }
-
-        private LineFeed ExtractLineFeed(string lineData, DateTime startDate, DateTime dateTime)
-        {
-            string[] feedArray = lineData.Split(' ');
-            if (DateTime.TryParse(feedArray[0], out DateTime _lineDate))
-            {
-                if (_lineDate >= startDate && _lineDate <= dateTime)
-                {
-                    return new LineFeed
-                    {
-                        EventTime = _lineDate,
-                        Email = feedArray[1],
-                        SessionId = feedArray[2]
-                    };
-                }
-            }
-            return default;
+            return feeds;
         }
     }
 }
