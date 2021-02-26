@@ -12,20 +12,27 @@ namespace Rokt.Console
     {
         static void Main(string[] args)
         {
-            ServiceProvider serviceProvider = InitDepencyInjection();
-            System.Console.WriteLine($"Event Search Application");
+            try
+            {
+                ServiceProvider serviceProvider = InitDepencyInjection();
+                System.Console.WriteLine($"Event Search Application");
 
-            EventSearchRequest searchRequest = ReadArgs();
+                EventSearchRequest searchRequest = ReadArgs();
 
-            System.Console.WriteLine($"Process started at {DateTime.Now}");
+                System.Console.WriteLine($"Process started at {DateTime.Now}");
 
-            var dataService = serviceProvider.GetService<IDataService>();
+                var dataService = serviceProvider.GetService<IDataService>();
 
-            var response = dataService.ExtractData(searchRequest);
+                var response = dataService.ExtractData(searchRequest);
 
-            System.Console.WriteLine(response);
-            System.Console.WriteLine($"Process completed at {DateTime.Now}");
-            System.Console.ReadLine();
+                System.Console.WriteLine(response);
+                System.Console.WriteLine($"Process completed at {DateTime.Now}");
+                System.Console.ReadLine();
+            }
+            catch (Exception ex)
+            {
+                System.Console.WriteLine(ex.Message);
+            }
         }
 
         private static EventSearchRequest ReadArgs()
